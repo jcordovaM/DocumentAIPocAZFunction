@@ -33,6 +33,19 @@ namespace DocumentAIPoc.Services
             }
         }
 
+        public ShareFileClient GetFileClient(string filename)
+        {
+            ShareFileClient file = dirClient.GetFileClient(filename);
+            if (file.Exists())
+            {
+                return file;
+            }
+            else
+            {
+                throw new Exception("File Client Download from Cloud Failed");
+            }
+        }
+
         public string GetCleanFilename(string filename)
         {
             char[] invalidFileNameChars = Path.GetInvalidFileNameChars();

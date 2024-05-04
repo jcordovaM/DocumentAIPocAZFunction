@@ -1,8 +1,9 @@
-﻿using DocumentAIPoc.Interfaces;
+﻿using Azure.Storage.Files.Shares;
+using DocumentAIPoc.Interfaces;
 
 namespace DocumentAIPoc.Services
 {
-    public class FileUploadLocalService : IFileUploadService
+    public class FileUploadLocalService// : IFileUploadService
     {
         string uploadPath = @".\UploadedFiles\";
 
@@ -18,5 +19,7 @@ namespace DocumentAIPoc.Services
                 throw new Exception("File Download Failed", ex);
             }
         }
+
+
     }
 }

@@ -28,15 +28,16 @@ namespace DocumentAIPoc.Services
 
         public async Task<AnalyzeResult?> AnalyzeDocument(Stream file)
         {
-            try
+            AnalyzeDocumentOperation operation = await docAIClient.AnalyzeDocumentAsync(WaitUntil.Completed, Config["DocumentAI:ModelId"], file);
+            await operation.WaitForCompletionAsync();
+
+            if (operation.HasCompleted && operation.HasValue)
             {
-                AnalyzeDocumentOperation operation = await docAIClient.AnalyzeDocumentAsync(WaitUntil.Completed, Config["DocumentAI:ModelId"], file);
-                AnalyzeResult result = operation.Value;
-                return result;
+                return operation.Value;
             }
-            catch (Exception ex)
+            else
             {
-                throw new Exception("Analyze document failed.", ex);
+                throw new Exception("Analyze document failed.");
             }
         }
 
