@@ -15,13 +15,13 @@ namespace DocumentAIPoc
     {
         private readonly ILogger<Function1> _logger;
         readonly IDocumentService _documentService;
-        readonly IFileUploadService _fileUploadService;
+        readonly IFileManager _fileManager;
 
-        public Function1(ILogger<Function1> logger, IDocumentService documentService, IFileUploadService fileUploadService)
+        public Function1(ILogger<Function1> logger, IDocumentService documentService, IFileManager fileManager)
         {
             _logger = logger;
             _documentService = documentService;
-            _fileUploadService = fileUploadService;
+            _fileManager = fileManager;
         }
 
 
@@ -32,7 +32,7 @@ namespace DocumentAIPoc
 
             try
             {
-                var fileClient = _fileUploadService.GetFileClient(filename);
+                var fileClient = _fileManager.GetFileClient(filename);
                 ShareFileDownloadInfo download = await fileClient.DownloadAsync();
                 MemoryStream ms1 = new MemoryStream();
                 await download.Content.CopyToAsync(ms1);

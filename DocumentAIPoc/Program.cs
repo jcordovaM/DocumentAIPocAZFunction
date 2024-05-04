@@ -11,7 +11,7 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddTransient<IFileUploadService, FileUploadService>();
+        services.AddTransient<IFileManager, FileManager>();
         services.AddTransient<IDocumentService, DocumentService>();
     })
     .ConfigureAppConfiguration(app =>

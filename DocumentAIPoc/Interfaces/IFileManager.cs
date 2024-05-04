@@ -2,7 +2,7 @@
 
 namespace DocumentAIPoc.Interfaces
 {
-    public interface IFileUploadService
+    public interface IFileManager
     {
         Stream GetFile(string filename);
         ShareFileClient GetFileClient(string filename);

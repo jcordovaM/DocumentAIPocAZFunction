@@ -6,14 +6,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace DocumentAIPoc.Services
 {
-    public class FileUploadService : IFileUploadService
+    public class FileManager : IFileManager
     {
         private readonly IConfiguration Config;
         private readonly ShareClient shareClient;
         private readonly ShareDirectoryClient dirClient;
         private string folderName = "";
 
-        public FileUploadService(IConfiguration configuration)
+        public FileManager(IConfiguration configuration)
         {
             Config = configuration;
             shareClient = new(Config["Storage:ConnectionString"], Config["AzureFileShare:AzureShareName"]);

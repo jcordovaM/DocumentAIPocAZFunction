@@ -3,7 +3,7 @@ using DocumentAIPoc.Interfaces;
 
 namespace DocumentAIPoc.Services
 {
-    public class FileUploadLocalService// : IFileUploadService
+    public class FileManagerLocal// : IFileManager
     {
         string uploadPath = @".\UploadedFiles\";
 
