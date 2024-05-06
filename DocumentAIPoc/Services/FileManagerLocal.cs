@@ -11,12 +11,12 @@ namespace DocumentAIPoc.Services
         {
             try
             {
-                using var fileStream = new FileStream(Path.Combine(uploadPath, filename), FileMode.Open);
+                using FileStream fileStream = new(Path.Combine(uploadPath, filename), FileMode.Open);
                 return fileStream;
             }
             catch (Exception ex)
             {
-                throw new Exception("File Download Failed", ex);
+                throw new Exception("File download failed", ex);
             }
         }
 

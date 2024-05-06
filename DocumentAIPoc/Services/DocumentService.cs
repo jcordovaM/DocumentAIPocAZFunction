@@ -14,16 +14,9 @@ namespace DocumentAIPoc.Services
 
         public DocumentService(IConfiguration configuration)
         {
-            try
-            {
-                Config = configuration;
-                credential = new AzureKeyCredential(Config["DocumentAI:Key"]);
-                docAIClient = new DocumentAnalysisClient(new Uri(Config["DocumentAI:Endpoint"]), credential);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Document Service Initialization Failed", ex);
-            }
+            Config = configuration;
+            credential = new AzureKeyCredential(Config["DocumentAI:Key"]);
+            docAIClient = new DocumentAnalysisClient(new Uri(Config["DocumentAI:Endpoint"]), credential);
         }
 
         public async Task<AnalyzeResult?> AnalyzeDocument(Stream file)
@@ -50,10 +43,10 @@ namespace DocumentAIPoc.Services
                 ExcelWorksheet workSheet;
 
                 int i = 1;
-                foreach (var table in tables)
+                foreach (DocumentTable table in tables)
                 {
                     workSheet = excel.Workbook.Worksheets.Add($"Sheet{i}");
-                    foreach (var cell in table.Cells)
+                    foreach (DocumentTableCell cell in table.Cells)
                     {
                         int row = int.Parse(cell.RowIndex.ToString()) + 1;
                         int col = int.Parse(cell.ColumnIndex.ToString()) + 1;

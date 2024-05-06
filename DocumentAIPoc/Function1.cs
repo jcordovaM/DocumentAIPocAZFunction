@@ -8,6 +8,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using Azure.Storage.Files.Shares.Models;
+using OfficeOpenXml;
 
 namespace DocumentAIPoc
 {
@@ -32,7 +33,7 @@ namespace DocumentAIPoc
 
             try
             {
-                var fileClient = _fileManager.GetFileClient(filename);
+                ShareFileClient fileClient = _fileManager.GetFileClient(filename);
                 ShareFileDownloadInfo download = await fileClient.DownloadAsync();
                 MemoryStream ms1 = new MemoryStream();
                 await download.Content.CopyToAsync(ms1);
@@ -42,8 +43,8 @@ namespace DocumentAIPoc
                 AnalyzeResult? document = task.Result;
                 if (document != null)
                 {
-                    var excel = _documentService.GenerateTablesSpreadsheet(document.Tables);
-                    var ms2 = new MemoryStream();
+                    ExcelPackage excel = _documentService.GenerateTablesSpreadsheet(document.Tables);
+                    MemoryStream ms2 = new MemoryStream();
                     ms2.Write(excel.GetAsByteArray(), 0, excel.GetAsByteArray().Length);
                     ms2.Position = 0;
                     excel.Dispose();
@@ -56,14 +57,14 @@ namespace DocumentAIPoc
             }
             catch (Exception ex)
             {
-                throw new Exception("Document Analysis Failed", ex);
+                throw new Exception("Document analysis failed", ex);
             }
             finally
             {
                 _logger.LogInformation("C# HTTP trigger analyze document function processed a request.");
             }
 
-            return new ObjectResult("Document Analysis Failed");
+            return new ObjectResult("Document analysis failed");
         }
     }
 }

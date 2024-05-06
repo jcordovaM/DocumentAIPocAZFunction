@@ -11,7 +11,6 @@ namespace DocumentAIPoc.Services
         private readonly IConfiguration Config;
         private readonly ShareClient shareClient;
         private readonly ShareDirectoryClient dirClient;
-        private string folderName = "";
 
         public FileManager(IConfiguration configuration)
         {
@@ -29,7 +28,7 @@ namespace DocumentAIPoc.Services
             }
             else
             {
-                throw new Exception("File Download from Cloud Failed");
+                throw new Exception("File download from Cloud failed");
             }
         }
 
@@ -42,14 +41,14 @@ namespace DocumentAIPoc.Services
             }
             else
             {
-                throw new Exception("File Client Download from Cloud Failed");
+                throw new Exception("File client download from Cloud failed, does not exist");
             }
         }
 
         public string GetCleanFilename(string filename)
         {
             char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
-            string cleanFilename = new string(filename.Where(ch => !invalidFileNameChars.Contains(ch)).ToArray());
+            string cleanFilename = new(filename.Where(ch => !invalidFileNameChars.Contains(ch)).ToArray());
             return cleanFilename;
         }
     }
