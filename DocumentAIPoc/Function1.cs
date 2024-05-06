@@ -35,24 +35,28 @@ namespace DocumentAIPoc
             {
                 ShareFileClient fileClient = _fileManager.GetFileClient(filename);
                 ShareFileDownloadInfo download = await fileClient.DownloadAsync();
-                MemoryStream ms1 = new MemoryStream();
-                await download.Content.CopyToAsync(ms1);
-                ms1.Position = 0;
-
-                Task<AnalyzeResult?> task = _documentService.AnalyzeDocument(ms1);
-                AnalyzeResult? document = task.Result;
-                if (document != null)
+                using (MemoryStream ms1 = new MemoryStream())
                 {
-                    ExcelPackage excel = _documentService.GenerateTablesSpreadsheet(document.Tables);
-                    MemoryStream ms2 = new MemoryStream();
-                    ms2.Write(excel.GetAsByteArray(), 0, excel.GetAsByteArray().Length);
-                    ms2.Position = 0;
-                    excel.Dispose();
+                    await download.Content.CopyToAsync(ms1);
+                    ms1.Position = 0;
 
-                    return new FileContentResult(ms2.ToArray(), "application/octet-stream")
+                    Task<AnalyzeResult?> task = _documentService.AnalyzeDocument(ms1);
+                    AnalyzeResult? document = task.Result;
+                    if (document != null)
                     {
-                        FileDownloadName = $"{Path.GetFileNameWithoutExtension(filename)}.xlsx"
-                    };
+                        ExcelPackage excel = _documentService.GenerateTablesSpreadsheet(document.Tables);
+                        using (MemoryStream ms2 = new MemoryStream())
+                        {
+                            ms2.Write(excel.GetAsByteArray(), 0, excel.GetAsByteArray().Length);
+                            ms2.Position = 0;
+                            excel.Dispose();
+
+                            return new FileContentResult(ms2.ToArray(), "application/octet-stream")
+                            {
+                                FileDownloadName = $"{Path.GetFileNameWithoutExtension(filename)}.xlsx"
+                            };
+                        }
+                    }
                 }
             }
             catch (Exception ex)
