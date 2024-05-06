@@ -25,7 +25,6 @@ namespace DocumentAIPoc
             _fileManager = fileManager;
         }
 
-
         [Function("Analyze")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
         {
